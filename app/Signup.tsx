@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import {
-    Alert,
-    KeyboardAvoidingView,
-    Platform,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 type Props = {
-  onNavigate?: (screen: "login" | "signup") => void;
+  onNavigate?: (screen: "login" | "signup" | "home" | "emergency") => void;
 };
 
 export default function Signup({ onNavigate }: Props) {

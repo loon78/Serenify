@@ -88,7 +88,7 @@ export async function POST(req: Request): Promise<Response> {
 
 Analyze this audio transcript and provide:
 1. A complete, accurate transcription of what was said
-2. A mood score from 1-10 based on emotional tone (1=very negative/distressed, 10=very positive/calm)
+2. A mood score from 1-10 based on emotional tone and what was expressed (1=very negative/distressed, 10=very positive/calm)
 
 IMPORTANT: Respond ONLY with valid JSON in this exact format:
 {

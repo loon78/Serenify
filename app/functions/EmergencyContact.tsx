@@ -12,6 +12,7 @@ import {
   View,
 } from "react-native";
 
+import { contactsStorage } from "../services/contactsStorage";
 import { styles } from "../styles/emergencyStyles";
 
 type Props = {
@@ -41,6 +42,21 @@ export default function EmergencyContact({ onNavigate }: Props) {
   const [newName, setNewName] = useState("");
   const [newRelationship, setNewRelationship] = useState("");
   const [newPhone, setNewPhone] = useState("");
+
+  // load contacts from storage on mount
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const contacts = await contactsStorage.getAllContacts();
+        if (mounted) setSupportContacts(contacts);
+      } catch (err) {
+        console.error('Failed to load emergency contacts', err);
+      }
+    })();
+
+    return () => { mounted = false; };
+  }, []);
 
   // Wave animation refs (3 concentric waves)
   const waveAnims = useRef([new Animated.Value(0), new Animated.Value(0), new Animated.Value(0)]).current;
@@ -76,17 +92,25 @@ export default function EmergencyContact({ onNavigate }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function handleAddContact() {
+  async function handleAddContact() {
     if (!newName.trim() || !newPhone.trim()) {
       Alert.alert("Missing fields", "Please enter a name and phone number.");
       return;
     }
-    const contact = { id: String(Date.now()), name: newName.trim(), relationship: newRelationship.trim(), phone: newPhone.trim() };
-    setSupportContacts((s) => [contact, ...s]);
-    setNewName("");
-    setNewRelationship("");
-    setNewPhone("");
-    setAdding(false);
+
+    try {
+      const toSave = { name: newName.trim(), relationship: newRelationship.trim(), phone: newPhone.trim() };
+      const saved = await contactsStorage.addContact(toSave);
+      // prepend to local state
+      setSupportContacts((s) => [saved, ...s]);
+      setNewName("");
+      setNewRelationship("");
+      setNewPhone("");
+      setAdding(false);
+    } catch (err) {
+      console.error('Failed to save contact', err);
+      Alert.alert('Save failed', 'Unable to save contact to local storage.');
+    }
   }
 
   return (

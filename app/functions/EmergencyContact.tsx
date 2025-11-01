@@ -5,6 +5,7 @@ import {
   Linking,
   Platform,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -88,7 +89,7 @@ export default function EmergencyContact({ onNavigate }: Props) {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
       <View style={styles.header}>
         <Text style={styles.title}>Emergency Support</Text>
         <Text style={styles.subtitle}>You're not alone. We're here for you.</Text>
@@ -181,16 +182,15 @@ export default function EmergencyContact({ onNavigate }: Props) {
           </View>
         </View>
       )}
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: "#FFE9EB",
     padding: 20,
-    justifyContent: "space-between",
   },
   header: { marginTop: 12 },
   title: { fontSize: 22, fontWeight: "700", color: "#DB7C87", marginBottom: 6 },

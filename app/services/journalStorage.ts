@@ -4,7 +4,7 @@
  */
 
 import { storage } from './storageService';
-import type { JournalEntry, MoodLevel } from './storageTypes';
+import type { JournalEntry } from './storageTypes';
 import { STORAGE_KEYS } from './storageTypes';
 
 class JournalStorageService {
@@ -91,11 +91,11 @@ class JournalStorageService {
   }
 
   /**
-   * Get entries by mood
+   * Get entries by numeric mood score (1-10)
    */
-  async getEntriesByMood(mood: MoodLevel): Promise<JournalEntry[]> {
+  async getEntriesByMoodScore(score: number): Promise<JournalEntry[]> {
     const entries = await this.getAllEntries();
-    return entries.filter(entry => entry.mood === mood);
+    return entries.filter(entry => typeof entry.moodScore === 'number' && entry.moodScore === score);
   }
 
   /**

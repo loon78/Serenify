@@ -23,7 +23,7 @@ export default function NewJournal() {
 
   // Track recording duration
   useEffect(() => {
-    let interval: ReturnType<typeof setInterval>;
+    let interval: ReturnType<typeof setInterval> | undefined;
     if (recording) {
       interval = setInterval(async () => {
         const status = await voiceRecording.getStatus();
@@ -33,7 +33,7 @@ export default function NewJournal() {
       }, 1000);
     }
     return () => {
-      if (interval) clearInterval(interval);
+      if (interval !== undefined) clearInterval(interval as any);
     };
   }, [recording]);
 

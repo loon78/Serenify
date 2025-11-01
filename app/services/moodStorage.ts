@@ -4,7 +4,7 @@
  */
 
 import { storage } from './storageService';
-import type { MoodEntry, MoodLevel } from './storageTypes';
+import type { MoodEntry } from './storageTypes';
 import { STORAGE_KEYS } from './storageTypes';
 
 class MoodStorageService {
@@ -29,9 +29,9 @@ class MoodStorageService {
   /**
    * Create or update mood entry for today
    */
-  async setTodayMood(mood: MoodLevel, notes?: string, activities?: string[]): Promise<MoodEntry> {
+  async setTodayMood(moodScore: number, notes?: string, activities?: string[]): Promise<MoodEntry> {
     const today = new Date().toISOString().split('T')[0];
-    return this.setMoodForDate(today, mood, notes, activities);
+    return this.setMoodForDate(today, moodScore, notes, activities);
   }
 
   /**
@@ -39,17 +39,20 @@ class MoodStorageService {
    */
   async setMoodForDate(
     date: string,
-    mood: MoodLevel,
+    moodScore: number,
     notes?: string,
     activities?: string[]
   ): Promise<MoodEntry> {
     const entries = await this.getAllEntries();
     const existingIndex = entries.findIndex(entry => entry.date === date);
 
+    // Normalize and clamp moodScore to integer 1-10
+    const normalizedScore = Math.min(10, Math.max(1, Math.round(Number(moodScore) || 1)));
+
     const newEntry: MoodEntry = {
       id: existingIndex >= 0 ? entries[existingIndex].id : this.generateId(),
       date,
-      mood,
+      moodScore: normalizedScore,
       notes,
       activities,
       createdAt: existingIndex >= 0 ? entries[existingIndex].createdAt : new Date().toISOString(),
@@ -110,44 +113,15 @@ class MoodStorageService {
    */
   async getMoodStats(startDate: string, endDate: string): Promise<{
     totalEntries: number;
-    moodCounts: Record<MoodLevel, number>;
     averageMood: number;
   }> {
     const entries = await this.getEntriesByDateRange(startDate, endDate);
-    
-    const moodCounts: Record<MoodLevel, number> = {
-      very_happy: 0,
-      happy: 0,
-      neutral: 0,
-      sad: 0,
-      very_sad: 0,
-      anxious: 0,
-      angry: 0,
-      tired: 0,
-    };
-
-    entries.forEach(entry => {
-      moodCounts[entry.mood]++;
-    });
-
-    // Calculate average mood score (0-7 scale)
-    const moodScores: Record<MoodLevel, number> = {
-      very_happy: 7,
-      happy: 6,
-      neutral: 5,
-      tired: 4,
-      anxious: 3,
-      sad: 2,
-      angry: 1,
-      very_sad: 0,
-    };
-
-    const totalScore = entries.reduce((sum, entry) => sum + moodScores[entry.mood], 0);
+    // Compute average based on moodScore (1-10). Entries should have moodScore.
+    const totalScore = entries.reduce((sum, entry) => sum + (typeof (entry as any).moodScore === 'number' ? (entry as any).moodScore : 0), 0);
     const averageMood = entries.length > 0 ? totalScore / entries.length : 0;
 
     return {
       totalEntries: entries.length,
-      moodCounts,
       averageMood: Math.round(averageMood * 10) / 10,
     };
   }

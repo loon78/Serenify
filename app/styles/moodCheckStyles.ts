@@ -9,7 +9,7 @@ const cellHeight = height / numColumns;
 export const moodCheckStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#FFE9EB", // emergency background
     paddingTop: 40,
   },
   header: {
@@ -22,50 +22,51 @@ export const moodCheckStyles = StyleSheet.create({
   headerTitle: {
     fontSize: 22,
     fontWeight: "700",
-    color: "#222",
+    color: "#6b4146", // emergency text tone
   },
   weekRow: {
     flexDirection: "row",
     borderBottomWidth: 1,
-    borderBottomColor: "#E0E0E0",
+    borderBottomColor: "#F5C1C5", // emergency soft border
     paddingBottom: 6,
   },
   weekDayText: {
     flex: 1,
     textAlign: "center",
     fontWeight: "600",
-    color: "#555",
+    color: "#6b4146", // emergency text tone
   },
   dayBox: {
     width: cellWidth,
-    height: cellHeight/1.2,
+    height: cellHeight / 1.2,
     borderWidth: 0.5,
-    borderColor: "#E0E0E0",
+    borderColor: "#F5C1C5", // emergency soft border
     alignItems: "center",
   },
   dayText: {
     fontSize: 16,
-    color: "#222",
+    color: "#6b4146", // emergency text tone
   },
   outsideMonth: {
-    backgroundColor: "#F8F9FA",
+    backgroundColor: "#FFF5F6", // subtle emergency-tinted background
   },
   outsideMonthText: {
-    color: "#B0B0B0",
+    color: "#A67A7E", // muted emergency text
   },
   todayBox: {
-    backgroundColor: "#E8F0FE",
+    backgroundColor: "#FFF0F1", // pale emergency highlight
     borderWidth: 2,
+    borderColor: "#DB7C87",
   },
   todayText: {
-    color: "#1A73E8",
+    color: "#DB7C87", // emergency accent
     fontWeight: "700",
   },
   fab: {
     position: "absolute",
     bottom: 30,
     right: 20,
-    backgroundColor: "#1A73E8",
+    backgroundColor: "#DB7C87", // emergency accent
     width: 56,
     height: 56,
     borderRadius: 28,

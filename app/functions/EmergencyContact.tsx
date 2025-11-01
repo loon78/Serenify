@@ -6,12 +6,13 @@ import {
   Platform,
   Pressable,
   ScrollView,
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+
+import { styles } from "../styles/emergencyStyles";
 
 type Props = {
   onNavigate?: (page: "home" | "emergency") => void;
@@ -186,81 +187,4 @@ export default function EmergencyContact({ onNavigate }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    backgroundColor: "#FFE9EB",
-    padding: 20,
-  },
-  header: { marginTop: 12 },
-  title: { fontSize: 22, fontWeight: "700", color: "#DB7C87", marginBottom: 6 },
-  subtitle: { color: "#6b4146", fontSize: 14 },
-  center: { alignItems: "center", justifyContent: "center", flex: 1 },
-  centerWrap: { alignItems: "center", marginVertical: 16 },
-  centerSpacer: { height: 8 },
-  centerButtonWrap: { width: 260, height: 260, alignItems: "center", justifyContent: "center" },
-  wavesContainer: { position: "absolute", width: 260, height: 260, alignItems: "center", justifyContent: "center" },
-  wave: { position: "absolute", width: 180, height: 180, borderRadius: 90, borderWidth: 2, borderColor: "rgba(219,124,135,0.45)", backgroundColor: "transparent" },
-  button: {
-    width: 180,
-    height: 180,
-    borderRadius: 90,
-    backgroundColor: "#DB7C87",
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.12,
-    shadowRadius: 10,
-  },
-  buttonPressed: { transform: [{ scale: 0.98 }], backgroundColor: "#b24f57" },
-  buttonText: { color: "#fff", fontWeight: "700", fontSize: 18 },
-  buttonSub: { color: "#fff", fontSize: 12, marginTop: 6, opacity: 0.95 },
-  footerRow: { paddingVertical: 12 },
-  note: { color: "#6b4146", textAlign: "center", marginBottom: 8 },
-  link: { color: "#6b4146", textAlign: "center", fontWeight: "700" },
-  noticeCard: {
-    backgroundColor: "#FCD9DC",
-    padding: 12,
-    borderRadius: 10,
-    marginVertical: 10,
-  },
-  noticeTitle: { fontWeight: "700", color: "#6b4146", marginBottom: 6 },
-  noticeText: { color: "#6b4146" },
-  sectionTitle: { marginTop: 8, marginBottom: 6, color: "#6b4146", fontWeight: "700", fontSize: 16 },
-  card: {
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    padding: 12,
-    marginBottom: 8,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  cardAlt: {
-    backgroundColor: "#F5C1C5",
-    borderRadius: 10,
-    padding: 12,
-    marginBottom: 8,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  name: { fontSize: 16, fontWeight: "700", color: "#6b4146" },
-  noteSmall: { color: "#6b4146", fontSize: 12 },
-  phone: { color: "#3b2a2b", fontWeight: "600", marginTop: 4 },
-  actionsSingle: { marginLeft: 12, flexDirection: "row", justifyContent: "flex-end" },
-  callButton: { color: "#fff", backgroundColor: "#DB7C87", paddingHorizontal: 12, paddingVertical: 8, borderRadius: 8 },
-  contactRow: { flexDirection: "row", alignItems: "center", backgroundColor: "#fff", padding: 10, borderRadius: 10, marginBottom: 8 },
-  avatar: { width: 44, height: 44, borderRadius: 22, alignItems: "center", justifyContent: "center", marginRight: 12, backgroundColor: "#F5C1C5" },
-  avatarText: { fontSize: 18 },
-  actions: { flexDirection: "row" },
-  smallBtn: { marginLeft: 8, color: "#DB7C87", fontWeight: "700" },
-  emptyText: { color: "#6b4146", fontStyle: "italic", marginBottom: 8 },
-  addBar: { backgroundColor: "#fff", padding: 14, borderRadius: 10, alignItems: "center", marginTop: 8 },
-  addBarText: { color: "#DB7C87", fontWeight: "700" },
-  addForm: { backgroundColor: "#fff", padding: 12, borderRadius: 10, marginTop: 8 },
-  input: { borderColor: "#f0b3b6", borderWidth: 1, padding: 10, borderRadius: 8, marginBottom: 8 },
-  submitBtn: { backgroundColor: "#DB7C87", padding: 10, borderRadius: 8, minWidth: 120, alignItems: "center" },
-  submitText: { color: "#fff", fontWeight: "700" },
-  cancelBtn: { backgroundColor: "#eee", padding: 10, borderRadius: 8, minWidth: 120, alignItems: "center" },
-  cancelText: { color: "#6b4146", fontWeight: "700" },
-});
 

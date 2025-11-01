@@ -11,7 +11,7 @@ import {
   startOfWeek,
   subMonths,
 } from "date-fns";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dimensions,
   FlatList,
@@ -21,6 +21,7 @@ import {
 } from "react-native";
 
 import MoodCard from "../components/moodCard";
+import { moodStorage } from "../services/moodStorage";
 import { moodCheckStyles } from "../styles/moodCheckStyles";
 
 const { width } = Dimensions.get("window");
@@ -61,6 +62,27 @@ export default function CalendarScreen() {
     setModalVisible(true);
   };
 
+  // Load persisted moods into the calendar when entering this page
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const entries = await moodStorage.getAllEntries();
+        const map: Record<string, number> = {};
+        entries.forEach((e) => {
+          if (e && typeof e.date === 'string' && typeof (e as any).moodScore === 'number') {
+            map[e.date] = (e as any).moodScore;
+          }
+        });
+        if (mounted) setMoodData(map);
+      } catch (error) {
+        console.error('Failed to load mood entries:', error);
+      }
+    })();
+
+    return () => { mounted = false; };
+  }, []);
+
   // Function to map mood score (1-10) → color (red→green)
   // const getMoodColor = (score: number): string => {
   //   const red = Math.floor(255 - (score - 1) * 20);
@@ -84,7 +106,15 @@ export default function CalendarScreen() {
     const moodScore = parseInt(mood, 10);
     if (selectedDay && !isNaN(moodScore) && moodScore >= 1 && moodScore <= 10) {
       const dateKey = format(selectedDay, "yyyy-MM-dd");
-      setMoodData((prev) => ({ ...prev, [dateKey]: moodScore }));
+      // persist the mood for the selected date and update UI
+      (async () => {
+        try {
+          await moodStorage.setMoodForDate(dateKey, moodScore);
+          setMoodData((prev) => ({ ...prev, [dateKey]: moodScore }));
+        } catch (error) {
+          console.error('Failed to save mood:', error);
+        }
+      })();
     }
     setModalVisible(false);
     setMood("");

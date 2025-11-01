@@ -168,7 +168,8 @@ class VoiceRecordingService {
       );
 
       sound.setOnPlaybackStatusUpdate((status) => {
-        if (status.didJustFinish) {
+        // Guard to ensure status is the success variant that contains didJustFinish
+        if ('didJustFinish' in status && status.didJustFinish) {
           sound.unloadAsync();
         }
       });
@@ -207,8 +208,8 @@ class VoiceRecordingService {
       const fileInfo = await FileSystem.getInfoAsync(uri);
       return {
         exists: fileInfo.exists,
-        size: fileInfo.size,
-        modificationTime: fileInfo.modificationTime,
+        size: fileInfo.exists ? fileInfo.size : undefined,
+        modificationTime: fileInfo.exists ? fileInfo.modificationTime : undefined,
       };
     } catch (error) {
       console.error('Error getting recording info:', error);

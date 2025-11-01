@@ -4,7 +4,7 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f7f8fa",
-    padding: 16,
+    padding: 24,
   },
   header: {
     fontSize: 24,
@@ -140,7 +140,7 @@ export default StyleSheet.create({
   },
   deleteButton: {
     position: "absolute",
-    top: 12,
+    top: 32,
     right: 12,
     padding: 8,
   },

@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import {
-    Alert,
-    KeyboardAvoidingView,
-    Platform,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 const COLORS = {
@@ -19,7 +19,7 @@ const COLORS = {
 };
 
 type Props = {
-  onNavigate?: (screen: "signup" | "login") => void;
+  onNavigate?: (screen: "signup" | "login" | "home" | "emergency") => void;
 };
 
 export default function Login({ onNavigate }: Props) {
@@ -37,7 +37,14 @@ export default function Login({ onNavigate }: Props) {
       return;
     }
     setError("");
-    // Replace with real auth logic; for now show an alert
+    // Replace with real auth logic; show welcome then navigate to home on OK
+    if (onNavigate) {
+      Alert.alert("Welcome", `Hi ${email}`, [
+        { text: "OK", onPress: () => onNavigate("home") },
+      ]);
+      return;
+    }
+    // fallback for when no navigation callback provided
     Alert.alert("Logged in", `Welcome, ${email}`);
   };
 
@@ -95,6 +102,10 @@ export default function Login({ onNavigate }: Props) {
 
         <TouchableOpacity style={styles.button} onPress={handleLogin} accessibilityLabel="login button">
           <Text style={styles.buttonText}>Sign in</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.guestButton} onPress={() => onNavigate && onNavigate("home")} accessibilityLabel="continue as guest">
+          <Text style={styles.guestText}>Continue as guest</Text>
         </TouchableOpacity>
 
         <View style={styles.rowCenter}>
@@ -224,5 +235,19 @@ const styles = StyleSheet.create({
     color: "#6b4146",
     fontSize: 11,
     textAlign: "center",
+  },
+  guestButton: {
+    marginTop: 10,
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.06)",
+    backgroundColor: "transparent",
+  },
+  guestText: {
+    color: "#6b4146",
+    fontSize: 14,
+    fontWeight: "600",
   },
 });

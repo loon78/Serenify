@@ -1,36 +1,13 @@
-import React, { useState } from "react";
-import { View } from "react-native";
-import AddContact from "../functions/AddContact";
-import EmergencyContact from "../functions/EmergencyContact";
-import Home from "../functions/Home";
-import Login from "../functions/Login";
-import Signup from "../functions/Signup";
+import { Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { homeStyles } from "../styles/homeStyles";
 
-export default function Index() {
-  const [screen, setScreen] = useState<"login" | "signup" | "home" | "emergency" | "addContact">("login");
-  const [familyContacts, setFamilyContacts] = useState<any[]>([]);
-
-  function handleAddContact(contact: any) {
-    setFamilyContacts((s) => [contact, ...s]);
-  }
-
+export default function Home() {
   return (
-    <View style={{ flex: 1 }}>
-      {screen === "login" && <Login onNavigate={(s: any) => setScreen(s)} />}
-      {screen === "signup" && <Signup onNavigate={(s: any) => setScreen(s)} />}
-      {screen === "home" && <Home onNavigate={(s: any) => setScreen(s)} />}
-      {screen === "emergency" && (
-        <EmergencyContact familyContacts={familyContacts} onNavigate={(s: any) => setScreen(s)} />
-      )}
-      {screen === "addContact" && (
-        <AddContact
-          onNavigate={(s: any) => setScreen(s)}
-          onAddContact={(c: any) => {
-            handleAddContact(c);
-            setScreen("emergency");
-          }}
-        />
-      )}
-    </View>
+    <SafeAreaView style={homeStyles.container}>
+      <View>
+        <Text style={homeStyles.title}>Home</Text>
+      </View>
+    </SafeAreaView>
   );
 }

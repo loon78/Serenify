@@ -10,8 +10,6 @@ import {
   View,
 } from "react-native";
 
-import Logo from "./components/Logo";
-
 const COLORS = {
   light1: "#FFE9EB",
   light2: "#FCD9DC",
@@ -57,7 +55,20 @@ export default function Login({ onNavigate }: Props) {
     >
       <View style={styles.topSection}>
         <View style={styles.logoWrap} accessible accessibilityLabel="Serenify logo">
-          <Logo size={72} />
+          {/* Replace emoji with vector logo component */}
+          {/* Lazy import to avoid runtime errors if library isn't installed */}
+          {/* eslint-disable-next-line @typescript-eslint/no-var-requires */}
+          {(() => {
+            try {
+              // require at runtime so app doesn't crash if dependency missing
+              // eslint-disable-next-line @typescript-eslint/no-var-requires
+              const Logo = require("./components/Logo").default;
+              return <Logo size={72} />;
+            } catch (e) {
+              // fallback to heart emoji
+              return <Text style={styles.logo}>❤️</Text>;
+            }
+          })()}
         </View>
         <Text style={styles.welcome}>Welcome back to Serenify</Text>
         <Text style={styles.caption}>Your journey to wellness continues here</Text>

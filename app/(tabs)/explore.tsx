@@ -15,7 +15,7 @@ const functionsData = [
   { id: "2", name: "AI Psychiatrist", color: "#007AFF", route: "/functions/psychiatrist", icon: "chatbubble-ellipses" },
   { id: "3", name: "Therapy", color: "#5856D6", route: "/functions/therapy", icon: "medical" },
   { id: "4", name: "Journal", color: "#34C759", route: "/functions/journalDashboard", icon: "journal" },
-  { id: "5", name: "Emergency & Support", color: "#FF3B30", route: "/functions/EmergencyContact", icon: "call" },
+  { id: "5", name: "Emergency & Support", color: "#FF3B30", route: "/functions/contacts", icon: "call" },
 ];
 
 export default function Explore() {

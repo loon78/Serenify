@@ -3,22 +3,24 @@ import { StyleSheet } from "react-native";
 export const exploreStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8F9FA",
+    backgroundColor: "#FFE9EB", // emergency background
     padding: 16,
   },
   header: {
     fontSize: 32,
     fontWeight: "bold",
-    color: "#1A1A1A",
+    color: "#DB7C87", // emergency primary
     marginBottom: 20,
   },
   searchInput: {
-    backgroundColor: "#FFF",
+    backgroundColor: "#fff",
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 16,
     marginBottom: 20,
+    borderColor: "#F5C1C5",
+    borderWidth: 1,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
@@ -36,14 +38,17 @@ export const exploreStyles = StyleSheet.create({
     minHeight: 140,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#F5C1C5", // soft emergency border
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
+    shadowOpacity: 0.08,
     shadowRadius: 8,
     elevation: 4,
   },
   cardText: {
-    color: "#FFF",
+    color: "#fbfbfbff", // emergency text tone
     fontSize: 18,
     fontWeight: "600",
     textAlign: "center",
@@ -55,6 +60,6 @@ export const exploreStyles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 16,
-    color: "#999",
+    color: "#6b4146",
   },
 });

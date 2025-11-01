@@ -39,8 +39,8 @@ Serenify is a mobile-first mental health companion built with Expo + React Nativ
    npm install
    ```
 
-3. Add Gemini API key (server side)
-   - Create `server/.env` with:
+3. Create a .env file (with same contents as .env.example)
+    Replace the placeholder Gemini Api Key with your own Gemini Api key obtained here [aistudio.google.com](aistudio.google.com)
      ```
      GOOGLE_API_KEY=your_gemini_api_key_here
      

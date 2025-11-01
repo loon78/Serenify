@@ -1,16 +1,16 @@
+import { JournalEntry, journalStorage, processAudioJournal, voiceRecording } from "@/app/services";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
+  Alert,
   ScrollView,
   Text,
   TouchableOpacity,
   View,
-  Alert,
-  ActivityIndicator,
 } from "react-native";
 import styles from "../styles/journalStyles";
-import { voiceRecording, journalStorage, processAudioJournal, JournalEntry } from "@/app/services";
 
 export default function NewJournal() {
   const [recording, setRecording] = useState(false);
@@ -23,7 +23,7 @@ export default function NewJournal() {
 
   // Track recording duration
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval> | undefined;
     if (recording) {
       interval = setInterval(async () => {
         const status = await voiceRecording.getStatus();
@@ -33,7 +33,7 @@ export default function NewJournal() {
       }, 1000);
     }
     return () => {
-      if (interval) clearInterval(interval);
+      if (interval !== undefined) clearInterval(interval as any);
     };
   }, [recording]);
 

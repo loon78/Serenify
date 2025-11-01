@@ -1,19 +1,28 @@
 import { StyleSheet } from "react-native";
 
+// Login palette (kept in sync with app/Login.tsx)
+const COLORS = {
+  light1: "#FFE9EB",
+  light2: "#FCD9DC",
+  mid: "#F5C1C5",
+  accent: "#EFB0B7",
+  strong: "#DB7C87",
+};
+
 export const exploreStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8F9FA",
+    backgroundColor: COLORS.light1,
     padding: 16,
   },
   header: {
     fontSize: 32,
     fontWeight: "bold",
-    color: "#1A1A1A",
+    color: COLORS.strong,
     marginBottom: 20,
   },
   searchInput: {
-    backgroundColor: "#FFF",
+    backgroundColor: COLORS.mid,
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
@@ -24,6 +33,9 @@ export const exploreStyles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 2,
+    borderWidth: 1,
+    borderColor: COLORS.accent,
+    color: "#222",
   },
   cardContainer: {
     paddingBottom: 20,
@@ -55,6 +67,6 @@ export const exploreStyles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 16,
-    color: "#999",
+    color: COLORS.accent,
   },
 });

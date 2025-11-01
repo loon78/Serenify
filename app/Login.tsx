@@ -46,8 +46,13 @@ export default function Login({ onNavigate }: Props) {
       ]);
       return;
     }
-    // fallback for when no navigation callback provided
-    Alert.alert("Logged in", `Welcome, ${email}`);
+    // When used with file-system routing, navigate to the tab layout
+    try {
+      // navigate to the tabbed layout group
+      router.replace("/(tabs)");
+    } catch (e) {
+      Alert.alert("Logged in", `Welcome, ${email}`);
+    }
   };
 
   return (
@@ -108,9 +113,10 @@ export default function Login({ onNavigate }: Props) {
 
         <TouchableOpacity
           style={styles.guestButton}
-          onPress={() => {
+            onPress={() => {
             try {
-              router.push("/explore");
+              // go to the tab layout group instead of a single subpage
+              router.replace("/(tabs)");
             } catch (e) {
               onNavigate && onNavigate("home");
             }

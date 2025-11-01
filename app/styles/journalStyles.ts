@@ -13,7 +13,7 @@ export default StyleSheet.create({
     fontWeight: "700",
     color: "#DB7C87", // emergency primary
     textAlign: "center",
-    marginVertical: 14,
+    marginVertical: 20,
   },
   emptyText: {
     color: "#6b4146",
@@ -21,6 +21,15 @@ export default StyleSheet.create({
     marginTop: 24,
     fontSize: 16,
     fontStyle: "italic",
+  },
+
+  /* Wrapper to center a single journal entry on the screen */
+  journalEntryWrapper: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 24,
+    width: "100%",
   },
 
   /* Journal list cards - larger and more prominent */
@@ -160,11 +169,14 @@ export default StyleSheet.create({
     padding: 18,
     borderWidth: 1,
     borderColor: "#F5C1C5",
-    marginTop: 12,
+    marginTop: 30,
     shadowColor: "#000",
     shadowOpacity: 0.06,
     shadowRadius: 8,
     elevation: 3,
+    width: "92%",       // keep card narrower than full width for a centered look
+    maxWidth: 800,
+    alignSelf: "center", // center horizontally
   },
 
   /* Floating action button (create new) */

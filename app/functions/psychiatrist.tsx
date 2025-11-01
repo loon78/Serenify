@@ -40,7 +40,7 @@ export default function AIPsychiatristScreen() {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={psychiatristStyles.container}
     >
       <View style={psychiatristStyles.innerContainer}>

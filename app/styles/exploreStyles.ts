@@ -1,14 +1,5 @@
 import { StyleSheet } from "react-native";
 
-// Login palette (kept in sync with app/Login.tsx)
-const COLORS = {
-  light1: "#FFE9EB",
-  light2: "#FCD9DC",
-  mid: "#F5C1C5",
-  accent: "#EFB0B7",
-  strong: "#DB7C87",
-};
-
 export const exploreStyles = StyleSheet.create({
   container: {
     flex: 1,
@@ -35,9 +26,6 @@ export const exploreStyles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 2,
-    borderWidth: 1,
-    borderColor: COLORS.accent,
-    color: "#222",
   },
   cardContainer: {
     paddingBottom: 20,

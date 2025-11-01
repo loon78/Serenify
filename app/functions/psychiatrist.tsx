@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { psychiatristStyles } from "../styles/psychiatristStyles";
 
 export default function AIPsychiatristScreen() {
@@ -39,64 +40,67 @@ export default function AIPsychiatristScreen() {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={psychiatristStyles.container}
-    >
-      <View style={psychiatristStyles.innerContainer}>
-        <Text style={psychiatristStyles.header}>AI Psychiatrist</Text>
+    <SafeAreaView style={psychiatristStyles.container}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={psychiatristStyles.container}
+      >
+        <View style={psychiatristStyles.innerContainer}>
+          <Text style={psychiatristStyles.header}>AI Psychiatrist</Text>
 
-        <ScrollView
-          style={psychiatristStyles.chatContainer}
-          contentContainerStyle={psychiatristStyles.chatContent}
-          showsVerticalScrollIndicator={false}
-        >
-          {messages.map((msg) => (
-            <View
-              key={msg.id}
-              style={[
-                psychiatristStyles.messageRow,
-                msg.sender === "user"
-                  ? psychiatristStyles.userMessageRow
-                  : psychiatristStyles.aiMessageRow,
-              ]}
-            >
+          <ScrollView
+            style={psychiatristStyles.chatContainer}
+            contentContainerStyle={psychiatristStyles.chatContent}
+            showsVerticalScrollIndicator={false}
+          >
+            {messages.map((msg) => (
               <View
+                key={msg.id}
                 style={[
-                  psychiatristStyles.messageBubble,
+                  psychiatristStyles.messageRow,
                   msg.sender === "user"
-                    ? psychiatristStyles.userBubble
-                    : psychiatristStyles.aiBubble,
+                    ? psychiatristStyles.userMessageRow
+                    : psychiatristStyles.aiMessageRow,
                 ]}
               >
-                <Text
+                <View
                   style={[
-                    psychiatristStyles.messageText,
+                    psychiatristStyles.messageBubble,
                     msg.sender === "user"
-                      ? psychiatristStyles.userText
-                      : psychiatristStyles.aiText,
+                      ? psychiatristStyles.userBubble
+                      : psychiatristStyles.aiBubble,
                   ]}
                 >
-                  {msg.text}
-                </Text>
+                  <Text
+                    style={[
+                      psychiatristStyles.messageText,
+                      msg.sender === "user"
+                        ? psychiatristStyles.userText
+                        : psychiatristStyles.aiText,
+                    ]}
+                  >
+                    {msg.text}
+                  </Text>
+                </View>
               </View>
-            </View>
-          ))}
-        </ScrollView>
+            ))}
+          </ScrollView>
 
-        <View style={psychiatristStyles.inputContainer}>
-          <TextInput
-            value={input}
-            onChangeText={setInput}
-            placeholder="Type your thoughts..."
-            placeholderTextColor="#999"
-            style={psychiatristStyles.input}
-          />
-          <TouchableOpacity onPress={handleSend}>
-            <Ionicons name="send" size={24} color="#4f9cf9" />
-          </TouchableOpacity>
+          <View style={psychiatristStyles.inputContainer}>
+            <TextInput
+              value={input}
+              onChangeText={setInput}
+              placeholder="Type your thoughts..."
+              placeholderTextColor="#999"
+              style={psychiatristStyles.input}
+            />
+            <TouchableOpacity onPress={handleSend}>
+              <Ionicons name="send" size={24} color="#4f9cf9" />
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+
   );
 }

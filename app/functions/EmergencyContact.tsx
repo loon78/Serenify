@@ -1,16 +1,16 @@
 import React from "react";
 import {
-    Alert,
-    Animated,
-    Easing,
-    Linking,
-    Platform,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Alert,
+  Animated,
+  Easing,
+  Linking,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 type Props = {
@@ -37,7 +37,7 @@ export default function EmergencyContact({ onNavigate, familyContacts = [] }: Pr
     new Animated.Value(0),
     new Animated.Value(0),
   ]).current;
-  const waveLoops = React.useRef<any[]>([]);
+  const waveLoops = React.useRef<Array<{ loop: Animated.CompositeAnimation; timeout: number }>>([]);
 
   function startWaves() {
     stopWaves();
@@ -57,11 +57,11 @@ export default function EmergencyContact({ onNavigate, familyContacts = [] }: Pr
   function stopWaves() {
     waveLoops.current.forEach((item) => {
       try {
-        if (item.loop && item.loop.stop) item.loop.stop();
+        item.loop.stop();
       } catch (e) {
         /* ignore */
       }
-      if (item.timeout) clearTimeout(item.timeout);
+      clearTimeout(item.timeout);
     });
     waveLoops.current = [];
     waveAnims.forEach((v) => v.setValue(0));
@@ -82,6 +82,7 @@ export default function EmergencyContact({ onNavigate, familyContacts = [] }: Pr
         Alert.alert("Cannot make call", `Unable to call ${number} from this device.`);
       }
     } catch (err) {
+      console.error("Failed to start call:", err);
       Alert.alert("Error", "Failed to start call.");
     }
   }
@@ -153,13 +154,13 @@ export default function EmergencyContact({ onNavigate, familyContacts = [] }: Pr
         <Text style={styles.sectionTitle}>Professional Help</Text>
         {COUNSELLING_CONTACTS.map((c) => (
           <View key={c.id} style={styles.card}>
-            <View style={styles.info}>
-              <Text style={styles.name}>{c.name}</Text>
-              <Text style={styles.phone}>{c.phone}</Text>
+              <View style={styles.info}>
+              <Text style={styles.name}>{c.name || "Unknown"}</Text>
+              <Text style={styles.phone}>{c.phone || "No phone"}</Text>
               {c.note ? <Text style={styles.note}>{c.note}</Text> : null}
             </View>
             <View style={styles.actionsSingle}>
-              <TouchableOpacity accessibilityLabel={`Call ${c.name}`} style={styles.actionBtn} onPress={() => dial(c.phone)}>
+              <TouchableOpacity accessibilityLabel={`Call ${c.name || "contact"}`} style={styles.actionBtn} onPress={() => dial(c.phone)}>
                 <Text style={styles.actionText}>Call</Text>
               </TouchableOpacity>
             </View>
@@ -175,15 +176,15 @@ export default function EmergencyContact({ onNavigate, familyContacts = [] }: Pr
           familyContacts.map((c: Contact) => (
             <View key={c.id} style={styles.cardAlt}>
               <View style={styles.avatar}>
-                <Text style={styles.avatarText}>{c.name.split(" ")[0][0]}</Text>
+                <Text style={styles.avatarText}>{c.name?.split(" ")[0]?.[0] || "?"}</Text>
               </View>
               <View style={{ flex: 1 }}>
-                <Text style={styles.name}>{c.name}</Text>
+                <Text style={styles.name}>{c.name || "Unknown"}</Text>
                 {c.relationship ? <Text style={styles.note}>{c.relationship}</Text> : null}
-                <Text style={styles.phone}>{c.phone}</Text>
+                <Text style={styles.phone}>{c.phone || "No phone"}</Text>
               </View>
               <View style={styles.actionsSingle}>
-                <TouchableOpacity accessibilityLabel={`Call ${c.name}`} style={styles.actionBtn} onPress={() => dial(c.phone)}>
+                <TouchableOpacity accessibilityLabel={`Call ${c.name || "contact"}`} style={styles.actionBtn} onPress={() => dial(c.phone)}>
                   <Text style={styles.actionText}>Call</Text>
                 </TouchableOpacity>
               </View>
@@ -275,7 +276,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   note: { marginTop: 2, color: "#6b4146", fontSize: 12 },
-  actions: { marginLeft: 12, flexDirection: "row" },
   actionsSingle: { marginLeft: 12, flexDirection: "row", justifyContent: "flex-end" },
   actionBtn: {
     paddingVertical: 8,
@@ -285,8 +285,6 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   actionText: { color: "#fff", fontWeight: "600" },
-  msgBtn: { backgroundColor: "#EFB0B7" },
-  msgText: { color: "#6b4146" },
   noteFooter: { marginTop: 16, color: "#6b4146", fontSize: 12, textAlign: "center" },
   centerRow: { marginVertical: 18, alignItems: "center", justifyContent: "center" },
   helpButton: {
@@ -317,18 +315,6 @@ const styles = StyleSheet.create({
   },
   avatarText: { fontWeight: "700", color: "#6b4146" },
   emptyText: { color: "#6b4146", textAlign: "center", marginVertical: 8 },
-  inputBar: { flexDirection: "row", alignItems: "center", marginTop: 8 },
-  input: {
-    flex: 1,
-    minWidth: 80,
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderRadius: 8,
-    backgroundColor: "#fff",
-    marginRight: 8,
-    borderWidth: 1,
-    borderColor: "#f0dfe0",
-  },
   addBtn: {
     backgroundColor: "#DB7C87",
     paddingVertical: 10,
@@ -355,5 +341,4 @@ const styles = StyleSheet.create({
     left: 0,
     backgroundColor: "transparent",
   },
-  
 });

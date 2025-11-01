@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-import AddContact from "./AddContact";
-import EmergencyContact from "./EmergencyContact";
+import AddContact from "./functions/AddContact";
+import EmergencyContact from "./functions/EmergencyContact";
 import Home from "./Home";
 import Login from "./Login";
 import Signup from "./Signup";

@@ -33,12 +33,12 @@ export const exploreStyles = StyleSheet.create({
   card: {
     flex: 1,
     margin: 8,
-    padding: 24,
     borderRadius: 16,
+    padding: 8,
     minHeight: 140,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "#f6d1d1ff",
     borderWidth: 1,
     borderColor: "#F5C1C5", // soft emergency border
     shadowColor: "#000",

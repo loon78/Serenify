@@ -28,51 +28,6 @@ export default function TabsLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name="psychiatrist"
-        options={{
-          title: "AI Chat",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="chatbubble-ellipses" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="journal"
-        options={{
-          title: "Journal",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="journal" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="mood-check"
-        options={{
-          title: "Mood",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="happy" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="contacts"
-        options={{
-          title: "Help",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="call" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="therapy"
-        options={{
-          title: "Therapy",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="medical" size={size} color={color} />
-          ),
-        }}
-      />
     </Tabs>
   );
 }

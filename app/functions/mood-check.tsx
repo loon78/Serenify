@@ -1,59 +1,171 @@
-import { StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
+import {
+  addDays,
+  addMonths,
+  endOfMonth,
+  endOfWeek,
+  format,
+  isSameDay,
+  isSameMonth,
+  startOfMonth,
+  startOfWeek,
+  subMonths,
+} from "date-fns";
+import React, { useState } from "react";
+import {
+  Dimensions,
+  FlatList,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-export default function MoodCheck() {
+import MoodCard from "../components/moodCard";
+import { moodCheckStyles } from "../styles/moodCheckStyles";
+
+const { width } = Dimensions.get("window");
+const numColumns = 7;
+const cellSize = width / numColumns;
+
+export default function CalendarScreen() {
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [modalVisible, setModalVisible] = useState(false);
+  const [mood, setMood] = useState("");
+  const [selectedDay, setSelectedDay] = useState<Date | null>(null);
+
+  // Store mood data per date (key = yyyy-MM-dd)
+  const [moodData, setMoodData] = useState<Record<string, number>>({});
+
+  const handlePrevMonth = () => setCurrentDate(subMonths(currentDate, 1));
+  const handleNextMonth = () => setCurrentDate(addMonths(currentDate, 1));
+
+  const generateDays = () => {
+    const startDate = startOfWeek(startOfMonth(currentDate));
+    const endDate = endOfWeek(endOfMonth(currentDate));
+    const days = [];
+    let day = startDate;
+
+    while (day <= endDate) {
+      days.push(day);
+      day = addDays(day, 1);
+    }
+    return days;
+  };
+
+  const days = generateDays();
+  const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const today = new Date();
+
+  const handleDayPress = (day: Date) => {
+    setSelectedDay(day);
+    setModalVisible(true);
+  };
+
+  // Function to map mood score (1-10) → color (red→green)
+  // const getMoodColor = (score: number): string => {
+  //   const red = Math.floor(255 - (score - 1) * 20);
+  //   const green = Math.floor((score - 1) * 20);
+  //   return `rgb(${red}, ${green}, 100)`; // balanced hue
+  // };
+
+  const getMoodColor = (score: number): string => {
+    // Clamp mood score between 1–10
+    const clamped = Math.max(1, Math.min(score, 10));
+
+    // Convert mood to hue (0 = red, 120 = green)
+    // mood 1 => 0° (red), mood 5 => 60° (yellow), mood 10 => 120° (green)
+    const hue = (clamped - 1) * 12; // total 120° range
+
+    // Higher saturation and lightness for a bright look
+    return `hsl(${hue}, 90%, 70%)`;
+  };
+
+  const handleSaveMood = () => {
+    const moodScore = parseInt(mood, 10);
+    if (selectedDay && !isNaN(moodScore) && moodScore >= 1 && moodScore <= 10) {
+      const dateKey = format(selectedDay, "yyyy-MM-dd");
+      setMoodData((prev) => ({ ...prev, [dateKey]: moodScore }));
+    }
+    setModalVisible(false);
+    setMood("");
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <Ionicons name="happy" size={80} color="#FF9500" />
-        <Text style={styles.title}>Mood Check Aid</Text>
-        <Text style={styles.description}>
-          Track and analyze your mood patterns to better understand your emotional well-being
+    <View style={moodCheckStyles.container}>
+      {/* ====== HEADER ====== */}
+      <View style={moodCheckStyles.header}>
+        <TouchableOpacity onPress={handlePrevMonth}>
+          <Ionicons name="chevron-back" size={24} color="#444" />
+        </TouchableOpacity>
+
+        <Text style={moodCheckStyles.headerTitle}>
+          {format(currentDate, "MMMM yyyy")}
         </Text>
-        <View style={styles.comingSoonBadge}>
-          <Text style={styles.comingSoonText}>Coming Soon</Text>
-        </View>
+
+        <TouchableOpacity onPress={handleNextMonth}>
+          <Ionicons name="chevron-forward" size={24} color="#444" />
+        </TouchableOpacity>
       </View>
-    </SafeAreaView>
+
+      {/* ====== WEEKDAY ROW ====== */}
+      <View style={moodCheckStyles.weekRow}>
+        {weekDays.map((day) => (
+          <Text key={day} style={moodCheckStyles.weekDayText}>
+            {day}
+          </Text>
+        ))}
+      </View>
+
+      {/* ====== CALENDAR GRID ====== */}
+      <FlatList
+        data={days}
+        numColumns={numColumns}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => {
+          const isCurrentMonth = isSameMonth(item, currentDate);
+          const isToday = isSameDay(item, today);
+          const dateKey = format(item, "yyyy-MM-dd");
+          const moodScore = moodData[dateKey];
+          const moodColor = moodScore ? getMoodColor(moodScore) : "#FFFFFF";
+
+          return (
+            <TouchableOpacity onPress={() => handleDayPress(item)}>
+              <View
+                style={[
+                  moodCheckStyles.dayBox,
+                  !isCurrentMonth && moodCheckStyles.outsideMonth,
+                  isToday && moodCheckStyles.todayBox,
+                  { backgroundColor: moodColor },
+                ]}
+              >
+                <Text
+                  style={[
+                    moodCheckStyles.dayText,
+                    !isCurrentMonth && moodCheckStyles.outsideMonthText,
+                    isToday && moodCheckStyles.todayText,
+                  ]}
+                >
+                  {format(item, "d")}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          );
+        }}
+      />
+
+      {/* ====== MOOD MODAL ====== */}
+      <MoodCard
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        mood={mood}
+        setMood={setMood}
+        onSave={handleSaveMood}
+      />
+
+      {/* ====== FLOATING ADD BUTTON ====== */}
+      <TouchableOpacity style={moodCheckStyles.fab}>
+        <Ionicons name="add" size={28} color="#fff" />
+      </TouchableOpacity>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#F8F9FA",
-  },
-  content: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 24,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    marginTop: 20,
-    marginBottom: 12,
-    color: "#1A1A1A",
-  },
-  description: {
-    fontSize: 16,
-    textAlign: "center",
-    color: "#666",
-    lineHeight: 24,
-    marginBottom: 24,
-  },
-  comingSoonBadge: {
-    backgroundColor: "#FF9500",
-    paddingHorizontal: 20,
-    paddingVertical: 8,
-    borderRadius: 20,
-  },
-  comingSoonText: {
-    color: "#FFF",
-    fontWeight: "600",
-    fontSize: 14,
-  },
-});
-

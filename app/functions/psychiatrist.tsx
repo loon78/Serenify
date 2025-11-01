@@ -10,6 +10,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ChatResponse, Message as GeminiMessage, sendMessageToGemini } from "../services";
 import { psychiatristStyles } from "../styles/psychiatristStyles";
 
 export default function AIPsychiatristScreen() {
@@ -27,16 +28,37 @@ export default function AIPsychiatristScreen() {
     const newMessage = { id: Date.now(), text: input.trim(), sender: "user" };
     setMessages((prev) => [...prev, newMessage]);
     setInput("");
+    // Build conversation history expected by gemini service.
+    // The server requires the first item in history to be a user message.
+    // Slice the combined messages so the first element is the first user message.
+    const combined = [
+      ...messages,
+      { id: newMessage.id, text: newMessage.text, sender: newMessage.sender },
+    ];
+    const firstUserIndex = combined.findIndex((m: any) => m.sender === 'user');
+    const sliced = firstUserIndex >= 0 ? combined.slice(firstUserIndex) : combined;
+    const conversationHistory: GeminiMessage[] = sliced.map((m: any) => ({
+      role: m.sender === 'user' ? 'user' : 'assistant',
+      content: m.text,
+    }));
 
-    // 👇 Placeholder for AI API call
-    setTimeout(() => {
-      const aiResponse = {
-        id: Date.now() + 1,
-        text: "I understand. Can you tell me more about what’s been bothering you lately?",
-        sender: "ai",
-      };
-      setMessages((prev) => [...prev, aiResponse]);
-    }, 800);
+    // Call the Gemini API service
+    (async () => {
+      try {
+        const res: ChatResponse = await sendMessageToGemini(newMessage.text, conversationHistory as any);
+        if (res.success && res.message) {
+          const aiResponse = { id: Date.now() + 1, text: res.message, sender: 'ai' };
+          setMessages((prev) => [...prev, aiResponse]);
+        } else {
+          const aiResponse = { id: Date.now() + 1, text: res.error || 'Sorry, something went wrong.', sender: 'ai' };
+          setMessages((prev) => [...prev, aiResponse]);
+        }
+      } catch (err) {
+        console.error('Error calling Gemini service:', err);
+        const aiResponse = { id: Date.now() + 1, text: 'Failed to reach the AI service.', sender: 'ai' };
+        setMessages((prev) => [...prev, aiResponse]);
+      }
+    })();
   };
 
   return (

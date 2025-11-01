@@ -1,16 +1,16 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#F8F9FA", padding: 16 },
+  container: { flex: 1, backgroundColor: "#FFE9EB", padding: 16 }, // emergency bg
   headerRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 12,
   },
-  title: { fontSize: 22, fontWeight: "700", color: "#1A1A1A" },
+  title: { fontSize: 22, fontWeight: "700", color: "#DB7C87" }, // emergency primary
 
-  // increased vertical padding so cards fill more space
+  // layout
   scroll: { paddingBottom: 32, paddingTop: 8 },
   card: {
     backgroundColor: "#fff",
@@ -21,26 +21,27 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     elevation: 3,
     shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    // ensure cards occupy more vertical space on larger screens
-    minHeight: 120,
+    shadowOpacity: 0.06,
+    shadowRadius: 6,
+    minHeight: 140, // larger cards to fill space
+    borderWidth: 1,
+    borderColor: "#F5C1C5", // soft emergency border
   },
   cardHeader: { flex: 1, paddingRight: 12 },
   cardTitle: {
     fontSize: 18,
     fontWeight: "700",
     marginBottom: 6,
-    color: "#111",
+    color: "#6b4146", // emergency text tone
   },
-  cardSubtitle: { color: "#666", fontSize: 14 },
+  cardSubtitle: { color: "#6b4146", fontSize: 14 },
 
-  // larger icon area to better balance the bigger cards
+  // icon area using emergency accent
   cardIcon: {
-    width: 64,
-    height: 64,
-    borderRadius: 12,
-    backgroundColor: "#f1f5fb",
+    width: 72,
+    height: 72,
+    borderRadius: 14,
+    backgroundColor: "#F5C1C5",
     justifyContent: "center",
     alignItems: "center",
     marginLeft: 8,
@@ -53,22 +54,30 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 8,
   },
-  modalTitle: { fontSize: 20, fontWeight: "700" },
+  modalTitle: { fontSize: 20, fontWeight: "700", color: "#6b4146" },
 
   breathArea: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 16,
+    backgroundColor: "#fff",
   },
-  circle: { width: 260, height: 260, borderRadius: 130, marginBottom: 20 },
-  phaseText: { fontSize: 20, fontWeight: "700", marginTop: 8 },
-  timerText: { fontSize: 36, fontWeight: "800", marginTop: 6, color: "#333" },
-  cycleText: { fontSize: 13, color: "#666", marginTop: 6 },
+  circle: {
+    width: 260,
+    height: 260,
+    borderRadius: 130,
+    marginBottom: 25,
+    borderWidth: 10,
+    borderColor: "rgba(219,124,135,0.12)",
+  },
+  phaseText: { fontSize: 20, fontWeight: "700", marginTop: 8, color: "#6b4146" },
+  timerText: { fontSize: 36, fontWeight: "800", marginTop: 6, color: "#3b2a2b" },
+  cycleText: { fontSize: 13, color: "#6b4146", marginTop: 6 },
 
   controls: { flexDirection: "row", marginTop: 20 },
   controlButton: {
-    backgroundColor: "#4f9cf9",
+    backgroundColor: "#DB7C87",
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 8,
@@ -77,5 +86,5 @@ export const styles = StyleSheet.create({
   controlText: { color: "#fff", fontWeight: "700" },
 
   legend: { marginTop: 24, paddingHorizontal: 20 },
-  legendText: { color: "#666", textAlign: "center" },
+  legendText: { color: "#6b4146", textAlign: "center" },
 });

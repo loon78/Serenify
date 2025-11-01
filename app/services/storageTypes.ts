@@ -12,6 +12,7 @@ export interface JournalEntry {
   voiceUri?: string; // URI to voice recording file
   voiceDuration?: number; // Duration in seconds
   mood?: MoodLevel; // Associated mood
+  moodScore?: number; // Mood score from 1-10 (from AI analysis)
   tags?: string[]; // Optional tags
 }
 

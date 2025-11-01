@@ -102,4 +102,46 @@ export default StyleSheet.create({
     borderColor: "#eee",
     marginTop: 10,
   },
+  moodScoreContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 12,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: "#eee",
+  },
+  moodScoreLabel: {
+    fontSize: 15,
+    color: "#666",
+    fontWeight: "500",
+  },
+  moodScoreValue: {
+    fontSize: 18,
+    color: "#4f9cf9",
+    fontWeight: "bold",
+  },
+  journalCardHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 4,
+  },
+  moodScoreBadge: {
+    backgroundColor: "#e8f4fd",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  moodScoreBadgeText: {
+    color: "#4f9cf9",
+    fontSize: 12,
+    fontWeight: "600",
+  },
+  deleteButton: {
+    position: "absolute",
+    top: 12,
+    right: 12,
+    padding: 8,
+  },
 });

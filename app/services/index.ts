@@ -10,6 +10,9 @@ export { moodStorage } from './moodStorage';
 export { contactsStorage } from './contactsStorage';
 export { voiceRecording } from './voiceRecordingService';
 
+// Export audio journal service
+export * from './audioJournalService';
+
 // Export types
 export * from './storageTypes';
 

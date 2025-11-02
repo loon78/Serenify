@@ -1,4 +1,4 @@
-import { endOfMonth, format, startOfMonth } from 'date-fns';
+import { addDays, differenceInCalendarDays, format, subDays } from 'date-fns';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from "react";
 import { Dimensions, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -35,8 +35,13 @@ export default function Home() {
     <SafeAreaView style={styles.safe}>
       <ScrollView contentContainerStyle={styles.container} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         <View style={styles.header}>
-          <Text style={styles.welcome}>Welcome back</Text>
-          <Text style={styles.user}>{userName}</Text>
+          <View>
+            <Text style={styles.welcome}>Welcome back</Text>
+            <Text style={styles.user}>{userName}</Text>
+          </View>
+          <TouchableOpacity style={styles.loginButton} onPress={() => router.push('/Login')} accessibilityLabel="Go to login">
+            <Text style={styles.loginLabel}>Log in</Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.section}>
@@ -92,27 +97,25 @@ function MoodLineChart({ refreshKey }: { refreshKey?: number }) {
     let mounted = true;
     (async () => {
       try {
-        const now = new Date();
-        const start = startOfMonth(now);
-        const end = endOfMonth(now);
-        const startKey = format(start, 'yyyy-MM-dd');
-        const endKey = format(end, 'yyyy-MM-dd');
-        const entries = await moodStorage.getEntriesByDateRange(startKey, endKey);
+  const end = new Date();
+  const start = subDays(end, 30); // start 30 days before today
+  const startKey = format(start, 'yyyy-MM-dd');
+  const endKey = format(end, 'yyyy-MM-dd');
+  const entries = await moodStorage.getEntriesByDateRange(startKey, endKey);
         const { width } = Dimensions.get('window');
         const padding = 12;
         const chartW = Math.max(240, width - 96);
         const chartH = 140;
 
-        // days in month
-        const daysInMonth = (new Date(end.getFullYear(), end.getMonth() + 1, 0).getDate());
+        // number of days in the requested window (inclusive)
+        const daysInRange = differenceInCalendarDays(end, start) + 1;
 
-        // build a lookup for entries by day number
-        const dayMap = new Map<number, number>();
+        // build a lookup for entries by ISO date key (yyyy-MM-dd)
+        const dayMap = new Map<string, number>();
         entries.forEach((e) => {
-          const parts = (e.date || '').split('-');
-          const day = Number(parts[2]);
+          const key = format(new Date(e.date), 'yyyy-MM-dd');
           const score = typeof (e as any).moodScore === 'number' ? (e as any).moodScore : NaN;
-          if (!isNaN(day) && !isNaN(score)) dayMap.set(day, score);
+          if (!isNaN(score)) dayMap.set(key, score);
         });
 
         if (dayMap.size === 0) {
@@ -122,16 +125,18 @@ function MoodLineChart({ refreshKey }: { refreshKey?: number }) {
 
         // compute evenly spaced X positions for each day slot
         const plotWidth = chartW - padding * 2;
-        const step = daysInMonth > 1 ? plotWidth / (daysInMonth - 1) : plotWidth;
+        const step = daysInRange > 1 ? plotWidth / (daysInRange - 1) : plotWidth;
 
-        const pts: Array<{ x: number; y: number; day: number }> = [];
-        for (let d = 1; d <= daysInMonth; d++) {
-          const score = dayMap.get(d);
+        const pts: Array<{ x: number; y: number; dayIndex: number; date: Date }> = [];
+        for (let i = 0; i < daysInRange; i++) {
+          const d = addDays(start, i);
+          const key = format(d, 'yyyy-MM-dd');
+          const score = dayMap.get(key);
           if (typeof score === 'number') {
-            const x = padding + (d - 1) * step;
+            const x = padding + i * step;
             // map score 0..10 to y (0 bottom, 10 top)
             const y = padding + (1 - (score / 10)) * (chartH - padding * 2);
-            pts.push({ x, y, day: d });
+            pts.push({ x, y, dayIndex: i, date: d });
           }
         }
 
@@ -140,7 +145,7 @@ function MoodLineChart({ refreshKey }: { refreshKey?: number }) {
           return;
         }
 
-        pts.sort((a, b) => a.day - b.day);
+  pts.sort((a, b) => a.dayIndex - b.dayIndex);
         const poly = pts.map(p => `${p.x},${p.y}`).join(' ');
         if (mounted) {
           setPoints(poly);
@@ -282,7 +287,8 @@ function MoodBarChart({ refreshKey }: { refreshKey?: number }) {
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: COLORS.light1 },
   container: { padding: 20, paddingBottom: 40 },
-  header: { marginBottom: 18 },
+  // header layout: left (welcome) and right (login)
+  header: { marginBottom: 18, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   welcome: { fontSize: 18, color: COLORS.strong },
   user: { fontSize: 28, fontWeight: '700', color: COLORS.strong, marginTop: 4 },
   section: { marginTop: 12 },
@@ -296,5 +302,6 @@ const styles = StyleSheet.create({
   recoCard: { backgroundColor: '#fff', padding: 14, borderRadius: 12, marginBottom: 10, borderWidth: 1, borderColor: '#eee' },
   recoTitle: { fontSize: 14, fontWeight: '700', color: '#222' },
   recoText: { fontSize: 13, color: '#555', marginTop: 6 },
-  
+  loginButton: { paddingHorizontal: 10, paddingVertical: 6, backgroundColor: 'transparent' },
+  loginLabel: { color: COLORS.strong, fontWeight: '700' },
 });

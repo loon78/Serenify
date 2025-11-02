@@ -42,7 +42,7 @@ export default function Therapy() {
 
   useEffect(() => {
     // animate circle size per phase
-    const toValue = phase === "inhale" ? 1.3 : phase === "hold" ? 1.0 : 0.7;
+    const toValue = phase === "inhale" ? 1.0 : phase === "hold" ? 0.8 : 0.7;
     Animated.spring(anim, {
       toValue,
       useNativeDriver: true,
